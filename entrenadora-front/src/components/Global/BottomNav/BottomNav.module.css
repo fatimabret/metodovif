@@ -1,0 +1,7 @@
+.pillContainer {
+  background: rgba(255, 255, 255, 0.7); /* Blanco súper translúcido */
+  backdrop-filter: blur(16px);          /* Desenfoque fuerte estilo cristal */
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Borde sutil brillante */
+  box-shadow: 0 10px 25px rgba(45, 37, 34, 0.08); /* Sombra elegante */
+}
