@@ -21,7 +21,7 @@ return [
 
     // Bloqueo estricto: Solo acepta peticiones de la URL definida en tu entorno
     'allowed_origins' => [
-        'https://verointegralfit.com', // Tu dominio futuro
+        'https://metodovif.vercel.app', // Tu dominio
         'http://localhost:5173',       // Tu servidor local de React
     ],
 
