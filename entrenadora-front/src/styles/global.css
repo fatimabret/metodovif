@@ -96,9 +96,8 @@
 @layer base {
     body {
         background: linear-gradient(180deg, #EAE2D6 0%, #FAF7F2 20%, #FAF7F2 100%);
-        background-attachment: fixed; 
         
-        color: #1A1412; /* Marrón oscuro para el cuerpo del texto */
+        color: #1A1412;
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
     }

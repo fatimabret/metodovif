@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Info, MailCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api.js';
 import { GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 export default function AuthModal({ activeView, onClose, onChangeView }) {
   const navigate = useNavigate();
+
+  const [startY, setStartY] = useState(null);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const [credenciales, setCredenciales] = useState({ correo: '', contrasenia: '' });
   const [errorLogin, setErrorLogin] = useState('');
@@ -141,8 +151,21 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
       >
         <style>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-        <div className="w-10 h-1 bg-[#D9D0C5] rounded-full mx-auto mb-6 md:hidden flex-shrink-0"></div>
+        <div 
+          className="w-full pt-2 pb-6 -mt-2 flex justify-center md:hidden cursor-pointer touch-none"
+          onTouchStart={(e) => setStartY(e.touches[0].clientY)}
+          onTouchEnd={(e) => {
+            if (!startY) return;
+            const endY = e.changedTouches[0].clientY;
+            if (endY - startY > 40) onClose(); 
+            setStartY(null);
+          }}
+          onClick={onClose}
+        >
+          <div className="w-12 h-1.5 bg-[#D9D0C5] rounded-full shadow-sm"></div>
+        </div>
 
+        </div>
         <button 
           onClick={onClose}
           className="absolute top-5 right-5 text-[#5C6653] hover:text-[#384230] p-1 rounded-full hover:bg-white transition-colors hidden md:block"

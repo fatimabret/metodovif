@@ -108,6 +108,8 @@ export default function Inicio() {
           backgroundImage: "url('/hero-bg.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          transform: "translateZ(0)",
+          willChange: "transform"
         }}
       ></div>
 
