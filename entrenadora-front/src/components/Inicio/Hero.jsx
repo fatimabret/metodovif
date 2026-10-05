@@ -13,16 +13,13 @@ export default function Hero({ titulo, biografia, urlFoto }) {
         </div>
       </div>
 
-      <div className="hero-image-wrapper relative w-full">
+      <div className="hero-image-wrapper relative w-full h-[65vh] md:h-[500px]">
         <img 
           src={urlFoto} 
           alt="Vero Integral Fit" 
-          className="hero-image mix-blend-multiply w-full object-cover" 
-          style={{
-            WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
-            maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)"
-          }}
+          className="hero-image w-full h-full object-cover object-top" 
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#FAF7F2]"></div>
       </div>
 
       <div className="hero-content relative z-20 w-full px-6 md:px-12 lg:px-24 xl:px-40 2xl:px-60 -mt-4 sm:-mt-8 md:-mt-24 lg:-mt-16 xl:-mt-8 flex flex-col items-start">

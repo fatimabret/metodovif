@@ -9,13 +9,7 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
   const navigate = useNavigate();
 
   const [startY, setStartY] = useState(null);
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, []);
+  const [currentY, setCurrentY] = useState(0);
 
   const [credenciales, setCredenciales] = useState({ correo: '', contrasenia: '' });
   const [errorLogin, setErrorLogin] = useState('');
@@ -29,6 +23,35 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
   const [correoRecuperacion, setCorreoRecuperacion] = useState('');
   const [estadoRecuperacion, setEstadoRecuperacion] = useState('idle');
   const [errorRecuperacion, setErrorRecuperacion] = useState('');
+
+  
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  const handleTouchStart = (e) => {
+    setStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!startY) return;
+    const diff = e.touches[0].clientY - startY;
+    if (diff > 0) {
+      setCurrentY(diff);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (currentY > 100) {
+      onClose();
+    } else {
+      setCurrentY(0); 
+    }
+    setStartY(null);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -145,21 +168,22 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
       onClick={onClose} 
     >
       <div 
-        className="w-full max-w-md bg-[#FAF7F2] rounded-t-[2.5rem] md:rounded-3xl p-6 md:p-8 pb-12 shadow-2xl relative animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="w-full max-w-md bg-[#FAF7F2] rounded-t-[2.5rem] md:rounded-3xl p-6 md:p-8 pb-12 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+        style={{ 
+          scrollbarWidth: 'none', 
+          msOverflowStyle: 'none',
+          transform: `translateY(${currentY}px)`, 
+          transition: startY ? 'none' : 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'
+        }}
         onClick={(e) => e.stopPropagation()} 
       >
         <style>{`div::-webkit-scrollbar { display: none; }`}</style>
 
         <div 
           className="w-full pt-2 pb-6 -mt-2 flex justify-center md:hidden cursor-pointer touch-none"
-          onTouchStart={(e) => setStartY(e.touches[0].clientY)}
-          onTouchEnd={(e) => {
-            if (!startY) return;
-            const endY = e.changedTouches[0].clientY;
-            if (endY - startY > 40) onClose(); 
-            setStartY(null);
-          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           onClick={onClose}
         >
           <div className="w-12 h-1.5 bg-[#D9D0C5] rounded-full shadow-sm"></div>
