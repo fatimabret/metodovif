@@ -165,7 +165,6 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
           <div className="w-12 h-1.5 bg-[#D9D0C5] rounded-full shadow-sm"></div>
         </div>
 
-        </div>
         <button 
           onClick={onClose}
           className="absolute top-5 right-5 text-[#5C6653] hover:text-[#384230] p-1 rounded-full hover:bg-white transition-colors hidden md:block"
