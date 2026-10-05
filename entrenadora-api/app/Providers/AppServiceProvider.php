@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
@@ -55,6 +56,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if (env('APP_ENV') !== 'local') {
+            URL::forceScheme('https');
+        }
+
         // 1. Límite para Login y Registro: 5 intentos por minuto por IP
         RateLimiter::for('auth_attempts', function (Request $request) {
             return Limit::perMinute(5)->by($request->ip());
