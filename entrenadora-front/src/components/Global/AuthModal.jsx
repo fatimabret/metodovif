@@ -26,6 +26,10 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
     setCargandoLogin(true);
 
     try {
+      await axios.get('https://metodovif-production.up.railway.app/sanctum/csrf-cookie', {
+        withCredentials: true 
+      });
+
       const respuesta = await api.post('/auth/login', {
         correo: credenciales.correo,
         contrasenia: credenciales.contrasenia
