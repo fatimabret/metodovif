@@ -105,7 +105,7 @@ export default function Inicio() {
       <div 
         className="fixed inset-0 w-full h-full pointer-events-none z-0"
         style={{
-          backgroundImage: "url('/hero-bg.png')",
+          backgroundImage: "url('/hero-bg.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
