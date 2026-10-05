@@ -201,7 +201,6 @@ export default function PerfilView() {
   };
 
   const handleEliminarFoto = async (id) => {
-    if(!window.confirm("¿Segura que deseas eliminar esta foto?")) return;
     try {
       await api.delete(`/galerias/${id}`);
       setGaleria(galeria.filter(f => f.id_galeria !== id));
