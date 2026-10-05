@@ -378,6 +378,15 @@ export default function AlumnaDetailView({
           </div>
         </div>
       )}
+        {showRutinaModal && (
+          <RutinaModal 
+            rutinaAEditar={rutinaToEdit} 
+            catalogoEjercicios={catalogoEjercicios || []} 
+            catalogoCategorias={catalogoCategorias || []} 
+            onClose={() => { setShowRutinaModal(false); setRutinaToEdit(null); }} 
+            onGuardarRutina={handleGuardarRutinaAPI} 
+          />
+      )}
     </div>
   );
 }
