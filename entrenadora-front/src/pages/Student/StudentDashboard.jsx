@@ -247,7 +247,7 @@ export default function StudentDashboard() {
       <div className="min-h-screen bg-[#FAF7F2] pb-32 font-sans text-[#1A1412]">
         <header className="pt-8 px-6 md:px-12 lg:px-32 xl:px-48 flex justify-between items-center mb-6">
           <h1 onClick={() => window.location.href = '/'} className="text-2xl font-display leading-none text-[#1A1412] cursor-pointer" >
-            Metodo <span className="italic text-[#5C524B]">VIF</span>
+            Método <span className="italic text-[#5C524B]">VIF</span>
           </h1>
           <button 
             onClick={handleLogout}
@@ -276,7 +276,7 @@ export default function StudentDashboard() {
       
       <header className="pt-8 px-6 md:px-12 lg:px-32 xl:px-48 2xl:px-72 flex justify-between items-center mb-6">
         <h1 onClick={() => handleTabChange('videos')} className="text-2xl font-display leading-none text-[#1A1412] cursor-pointer" >
-          Metodo <span className="italic text-[#5C524B]">VIF</span>
+          Método <span className="italic text-[#5C524B]">VIF</span>
         </h1>
         
         <button 

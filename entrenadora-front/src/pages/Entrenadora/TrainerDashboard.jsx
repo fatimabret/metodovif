@@ -57,7 +57,7 @@ export default function TrainerDashboard() {
       <header className="pt-8 px-6 md:px-12 lg:px-32 xl:px-48 2xl:px-72 flex justify-between items-start mb-6">
         <div className="flex flex-col items-start">
         <h1 onClick={() => handleTabChange('resumen')} className="text-2xl font-display leading-none text-[#1A1412] cursor-pointer" >
-          Metodo <span className="italic text-[#5C524B]">VIF</span>
+          Método <span className="italic text-[#5C524B]">VIF</span>
         </h1>
           <span className="bg-[#384230] text-[#FAF7F2] text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
             Entrenadora

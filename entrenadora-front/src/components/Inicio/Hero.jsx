@@ -8,7 +8,7 @@ export default function Hero({ titulo, biografia, urlFoto }) {
           className="hero-logo-box inline-flex items-center justify-center bg-white/40 backdrop-blur-md border border-white/60 shadow-sm rounded-full px-5 py-2 md:px-6 md:py-2.5 cursor-pointer hover:bg-white/60 transition-colors"
         >
             <h2 className="text-base md:text-lg font-display leading-none text-[#1A1412] flex items-baseline gap-1.5 m-0" >
-              Metodo <span className="script text-[#384230] text-xl md:text-2xl italic tracking-wide">VIF</span>
+              Método <span className="script text-[#384230] text-xl md:text-2xl italic tracking-wide">VIF</span>
             </h2>
         </div>
       </div>
