@@ -12,6 +12,7 @@ use App\Mail\AlumnaAprobadaMail;
 use Illuminate\Support\Facades\Log;
 
 use App\Http\Resources\UsuarioResource;
+use Illuminate\Support\Facades\Http;
 
 class UsuarioController extends Controller
 {
@@ -91,7 +92,13 @@ class UsuarioController extends Controller
         $usuarioActualizado = $this->servicio->aprobarAlumna($id, $datosValidados);
         
         try {
-            Mail::to($usuarioActualizado->correo)->send(new AlumnaAprobadaMail($usuarioActualizado));
+            $html = (new \App\Mail\AlumnaAprobadaMail($usuarioActualizado))->render();
+
+            Http::post('https://hook.us2.make.com/6dp48x2lrewuarv9rqihvt2wbedokeef', [
+                'to' => $usuarioActualizado->correo,
+                'subject' => '¡Tu cuenta en Metodo VIF está activa!',
+                'html' => $html
+            ]);
         } catch (\Exception $e) {
             Log::error("Error al enviar correo de aprobación a " . $usuarioActualizado->correo . ": " . $e->getMessage());
         }
@@ -130,7 +137,13 @@ class UsuarioController extends Controller
         $estadoNuevo = strtolower($usuarioActualizado->estado);
         if ($estadoNuevo === 'activa' && $estadoAnterior !== 'activa') {
             try {
-                Mail::to($usuarioActualizado->correo)->send(new AlumnaAprobadaMail($usuarioActualizado));
+                $html = (new \App\Mail\AlumnaAprobadaMail($usuarioActualizado))->render();
+
+                Http::post('https://hook.us2.make.com/6dp48x2lrewuarv9rqihvt2wbedokeef', [
+                    'to' => $usuarioActualizado->correo,
+                    'subject' => '¡Tu cuenta en Metodo VIF está activa!',
+                    'html' => $html
+                ]);
             } catch (\Exception $e) {
                 Log::error("Error al enviar correo de reactivación a " . $usuarioActualizado->correo . ": " . $e->getMessage());
             }

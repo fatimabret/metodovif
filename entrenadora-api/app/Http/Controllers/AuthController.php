@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Google\Client as GoogleClient;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RecuperarPasswordMail;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -147,7 +148,14 @@ class AuthController extends Controller
         );
 
         try {
-            Mail::to($request->correo)->send(new RecuperarPasswordMail($token, $request->correo));
+            $html = (new \App\Mail\RecuperarPasswordMail($token, $request->correo))->render();
+
+            Http::post('https://hook.us2.make.com/6dp48x2lrewuarv9rqihvt2wbedokeef', [
+                'to' => $request->correo,
+                'subject' => 'Recuperación de contraseña - Metodo VIF',
+                'html' => $html
+            ]);
+
             return response()->json(['mensaje' => 'Correo de recuperación enviado. Revisa tu bandeja.']);
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Error enviando correo de recuperación: ' . $e->getMessage());
