@@ -42,7 +42,7 @@ export default function AlumnasView() {
       try {
         const [resAlumnas, resMembresias, resEjercicios, resRutinas, resCategorias] = await Promise.all([
           api.get('/usuarios'),
-          api.get('/membresias'),
+          api.get('/membresias').catch(() => ({ data: [] })),
           api.get('/ejercicios').catch(() => ({ data: [] })),
           api.get('/rutinas').catch(() => ({ data: [] })),
           api.get('/categorias').catch(() => ({ data: [] }))
