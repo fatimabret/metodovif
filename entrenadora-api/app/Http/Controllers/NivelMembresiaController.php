@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\NivelMembresiaService;
+use Illuminate\Support\Facades\DB;
 
 class NivelMembresiaController extends Controller
 {
@@ -19,8 +20,8 @@ class NivelMembresiaController extends Controller
     {
         $usuarioLogueado = $request->user();
         $soloActivos = $usuarioLogueado instanceof \App\Models\Usuario; 
-        $niveles = $this->servicio->obtenerTodos($soloActivos);
-        
+        $niveles = \App\Models\NivelMembresia::with('categorias')->get();
+
         $nivelesFormateados = $niveles->map(function($nivel) {
             return [
                 'id_nivel' => $nivel->id_nivel,
@@ -29,7 +30,8 @@ class NivelMembresiaController extends Controller
                 'precio' => $nivel->precio,
                 'activo' => (bool) $nivel->activo,
                 'incluye_rutinas' => (bool) $nivel->incluye_rutinas,
-                'es_popular' => (bool) ($nivel->es_popular ?? false) 
+                'es_popular' => (bool) ($nivel->es_popular ?? false),
+                'categorias' => $nivel->categorias->pluck('id_categoria') 
             ];
         });
         
@@ -44,9 +46,24 @@ class NivelMembresiaController extends Controller
             'precio' => 'required|numeric|min:0',
             'incluye_rutinas' => 'required|boolean',
             'es_popular' => 'sometimes|boolean',
+            'categorias' => 'nullable|array',
+            'categorias.*' => 'exists:categoria,id_categoria'
         ]);
 
+        $idsCategorias = $datosValidados['categorias'] ?? [];
+        unset($datosValidados['categorias']);
+
         $nuevoNivel = $this->servicio->crear($datosValidados);
+
+        if (!empty($idsCategorias)) {
+            foreach ($idsCategorias as $idCat) {
+                DB::table('nivel_membresia_categoria')->insert([
+                    'id_nivel' => $nuevoNivel->id_nivel,
+                    'id_categoria' => $idCat
+                ]);
+            }
+        }
+
         return response()->json($nuevoNivel, 201); 
     }
 
@@ -64,9 +81,25 @@ class NivelMembresiaController extends Controller
             'precio' => 'sometimes|numeric|min:0',
             'incluye_rutinas' => 'required|boolean',
             'es_popular' => 'sometimes|boolean',
+            'categorias' => 'nullable|array',
+            'categorias.*' => 'exists:categoria,id_categoria'
         ]);
 
+        $idsCategorias = $request->input('categorias', null);
+        unset($datosValidados['categorias']);
+
         $nivelActualizado = $this->servicio->actualizar($id, $datosValidados);
+
+        if ($idsCategorias !== null) {
+            DB::table('nivel_membresia_categoria')->where('id_nivel', $id)->delete();
+            foreach ($idsCategorias as $idCat) {
+                DB::table('nivel_membresia_categoria')->insert([
+                    'id_nivel' => $id,
+                    'id_categoria' => $idCat
+                ]);
+            }
+        }
+
         return response()->json($nivelActualizado, 200);
     }
 

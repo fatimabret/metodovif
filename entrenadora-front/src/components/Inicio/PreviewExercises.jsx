@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, PlayCircle } from 'lucide-react';
 import SectionHeader from '../Global/SectionHeader';
 import VideoModal from '../Student/VideoModal';
@@ -6,6 +6,18 @@ import VideoModal from '../Student/VideoModal';
 export default function PreviewExercises({ ejercicios = [] }) {
   const [ejercicioAbierto, setEjercicioAbierto] = useState(null);
   const [videoEnModal, setVideoEnModal] = useState(null); 
+
+  useEffect(() => {
+    if (videoEnModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [videoEnModal]);
 
   const toggleEjercicio = (id) => {
     setEjercicioAbierto(ejercicioAbierto === id ? null : id);
@@ -30,7 +42,7 @@ export default function PreviewExercises({ ejercicios = [] }) {
   };
 
   return (
-    <section id="ejercicios-prueba" className="w-full pt-16 md:pt-24 relative z-10">
+    <section id="ejercicios-prueba" className={`w-full pt-16 md:pt-24 relative ${videoEnModal ? 'z-50' : 'z-10'}`}>
       <SectionHeader eyebrow="MUESTRA" title="Ejercicios de prueba" />
       <div className="w-full px-6 md:px-12 lg:px-32 xl:px-48 2xl:px-72 mb-8 mt-[-1rem]">
         <p className="text-[#5C524B] font-medium text-sm md:text-base">

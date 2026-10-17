@@ -1,9 +1,16 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { X, Trash2, Image as ImageIcon, Plus } from 'lucide-react';
 import api from '../../../api';
 
 export default function TestimonioModal({ testimonioDraft, setTestimonioDraft, onClose, onGuardar }) {
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const totalFotos = (testimonioDraft.imagenes?.length || 0) + (testimonioDraft.fotos?.length || 0);
 

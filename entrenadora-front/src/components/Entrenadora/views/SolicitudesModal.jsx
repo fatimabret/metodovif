@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { X, Clock, Check, AlertCircle } from 'lucide-react';
 
 export default function SolicitudesModal({ 
@@ -11,6 +12,13 @@ export default function SolicitudesModal({
   onAprobar
 }) {
   
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   const obtenerFechaLocal = (fecha) => {
     const year = fecha.getFullYear();
     const month = String(fecha.getMonth() + 1).padStart(2, '0');

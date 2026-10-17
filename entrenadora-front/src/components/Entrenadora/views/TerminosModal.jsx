@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 
 export default function TerminosModal({ 
@@ -6,6 +7,13 @@ export default function TerminosModal({
   onClose, 
   onGuardar 
 }) {
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const handleAddTermino = () => {
     setTerminosDraft([...terminosDraft, { titulo: '', descripcion: '' }]);

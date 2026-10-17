@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 export default function ContactoModal({ 
@@ -6,8 +7,14 @@ export default function ContactoModal({
   onClose, 
   onGuardar 
 }) {
-  // Determinamos si es edición detectando cualquiera de los dos IDs
   const isEditing = Boolean(contactoDraft.id_contacto || contactoDraft.id);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1412]/40 backdrop-blur-sm px-4 animate-fadeIn">

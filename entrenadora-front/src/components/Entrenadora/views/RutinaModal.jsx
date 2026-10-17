@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Search, Plus, Edit3, ArrowRight } from 'lucide-react';
 
 export default function RutinaModal({ onClose, catalogoEjercicios, catalogoCategorias, onGuardarRutina, rutinaAEditar }) {
   const [activeTab, setActiveTab] = useState('info'); 
   const [showSelector, setShowSelector] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const [rutinaDraft, setRutinaDraft] = useState(() => {
     if (rutinaAEditar) {

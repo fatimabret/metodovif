@@ -67,6 +67,18 @@ export default function PerfilView() {
       setCargandoPass(false);
     }
   };
+  
+  useEffect(() => {
+    if (showPasswordModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showPasswordModal]);
 
   useEffect(() => {
     const fetchDatos = async () => {

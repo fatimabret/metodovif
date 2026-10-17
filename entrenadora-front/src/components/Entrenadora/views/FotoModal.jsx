@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 export default function FotoModal({ 
@@ -7,6 +8,14 @@ export default function FotoModal({
   onClose, 
   onGuardar 
 }) {
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1412]/40 backdrop-blur-sm px-4 animate-fadeIn">
       <div className="bg-[#FAF7F2] w-full max-w-md rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-slideUp">

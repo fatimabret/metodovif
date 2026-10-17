@@ -23,4 +23,9 @@ class NivelMembresia extends Model
         'incluye_rutinas' => 'boolean',
         'es_popular' => 'boolean',
     ];
+
+    public function categorias()
+    {
+        return $this->belongsToMany(Categoria::class, 'nivel_membresia_categoria', 'id_nivel', 'id_categoria');
+    }
 }

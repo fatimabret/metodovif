@@ -1,5 +1,5 @@
 import { ArrowLeft, Pencil, X, CalendarPlus, ChevronRight, AlertCircle, Plus, BookOpen, PlayCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RutinaModal from './RutinaModal';
 import RutinaDetailView from './RutinaDetailView';
 import api from '../../../api'; 
@@ -28,6 +28,18 @@ export default function AlumnaDetailView({
   const [nuevaFecha, setNuevaFecha] = useState('');
   const [dateError, setDateError] = useState(''); 
   const [pendingAlta, setPendingAlta] = useState(false);
+
+  useEffect(() => {
+    if (showAsignarModal || showPlazoModal || showRutinaModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showAsignarModal, showPlazoModal, showRutinaModal]);
 
   const obtenerFechaLocal = (fecha) => {
     const year = fecha.getFullYear();
