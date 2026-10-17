@@ -1,3 +1,5 @@
+<?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,7 +13,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_nivel');
             $table->unsignedBigInteger('id_categoria');
 
-            // Llaves foráneas vinculadas a tus tablas actuales
             $table->foreign('id_nivel')
                   ->references('id_nivel')->on('nivel_membresia')
                   ->onDelete('cascade');
