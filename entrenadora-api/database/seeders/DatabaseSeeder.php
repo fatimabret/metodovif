@@ -11,6 +11,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call([
+            NivelMembresiaCategoriaSeeder::class,
+        ]);
+
         User::updateOrCreate(
             ['email' => 'contacto.metodovif@gmail.com'],
             [
