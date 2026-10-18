@@ -122,17 +122,24 @@ class UsuarioController extends Controller
         ]);
 
         $usuarioPrevio = Usuario::findOrFail($id);
+        $fechaAnterior = $usuarioPrevio->fecha_vencimiento;
         $estadoAnterior = strtolower($usuarioPrevio->estado);
 
-        if (isset($datosValidados['fecha_vencimiento'])) {
-            $fecha = \Carbon\Carbon::parse($datosValidados['fecha_vencimiento'])->startOfDay();
-            
-            if ($fecha->greaterThanOrEqualTo(now()->startOfDay())) {
-                $datosValidados['estado'] = 'activa';
+        $usuarioActualizado = $this->servicio->actualizar($id, $datosValidados);
+        
+        if (isset($datosValidados['fecha_vencimiento']) && $usuarioActualizado->fecha_vencimiento !== $fechaAnterior) {
+            try {
+                $html = (new \App\Mail\FechaModificadaMail($usuarioActualizado))->render();
+                
+                Http::post('https://hook.us2.make.com/6dp48x2lrewuarv9rqihvt2wbedokeef', [
+                    'to' => $usuarioActualizado->correo,
+                    'subject' => 'Actualización de tu plan - Metodo VIF',
+                    'html' => $html
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Error correo vencimiento: ' . $e->getMessage());
             }
         }
-
-        $usuarioActualizado = $this->servicio->actualizar($id, $datosValidados);
         
         $estadoNuevo = strtolower($usuarioActualizado->estado);
         if ($estadoNuevo === 'activa' && $estadoAnterior !== 'activa') {
