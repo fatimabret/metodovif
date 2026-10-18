@@ -183,21 +183,31 @@ export default function AlumnasView() {
         }}
 
         onCambiarEstado={async (nuevoEstado) => {
+          const estadoAnterior = selectedAlumna.estado;
+          const nuevoEstadoTexto = nuevoEstado === 'Baja' ? 'inactiva' : 'activa';
+
+          setAlumnas(prev => prev.map(a => 
+            (a.id_usuario || a.id) === alumnaMapeada.id ? { ...a, estado: nuevoEstadoTexto } : a
+          ));
+          setSelectedAlumna(prev => ({ ...prev, estado: nuevoEstadoTexto }));
+
           try {
             if (nuevoEstado === 'Baja') {
               await api.delete(`/usuarios/${alumnaMapeada.id}`);
-              setAlumnas(alumnas.map(a => (a.id_usuario || a.id) === alumnaMapeada.id ? { ...a, estado: 'inactiva' } : a));
-              setSelectedAlumna({ ...selectedAlumna, estado: 'inactiva' });
             } else {
               await api.put(`/usuarios/${alumnaMapeada.id}`, { estado: 'activa' });
-              setAlumnas(alumnas.map(a => (a.id_usuario || a.id) === alumnaMapeada.id ? { ...a, estado: 'activa' } : a));
-              setSelectedAlumna({ ...selectedAlumna, estado: 'activa' });
             }
           } catch (error) {
             console.error("Error al cambiar estado", error);
-            alert("Hubo un problema al actualizar el estado de la alumna.");
+
+            setAlumnas(prev => prev.map(a => 
+              (a.id_usuario || a.id) === alumnaMapeada.id ? { ...a, estado: estadoAnterior } : a
+            ));
+            setSelectedAlumna(prev => ({ ...prev, estado: estadoAnterior }));
+            alert("No se pudo actualizar el estado por un problema de conexión.");
           }
         }}
+
         onCambiarPlan={async (nuevoIdNivel) => {
           try {
             await api.put(`/usuarios/${alumnaMapeada.id}`, { id_nivel: nuevoIdNivel });
