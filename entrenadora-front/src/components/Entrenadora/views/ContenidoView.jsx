@@ -532,6 +532,20 @@ export default function ContenidoView() {
                         <span className="text-[#1A1412] text-base font-bold leading-tight">{plan.titulo}</span>
                         {esPopular && <span className="bg-[#E56B6F]/10 text-[#E56B6F] text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md flex items-center gap-1"><Star size={10} className="fill-[#E56B6F]" /> Popular</span>}
                       </div>
+
+                      {plan.categorias_detalle && plan.categorias_detalle.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1 mb-1">
+                          {plan.categorias_detalle.map((disciplina, idx) => (
+                            <span 
+                              key={idx} 
+                              className="bg-[#FAF7F2] border border-[#EAE2D6] text-[#87786E] text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-widest"
+                            >
+                              {disciplina}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
                       <span className="text-[#87786E] text-[13px] font-bold">${plan.precio} / mes</span>
                       {plan.descripcion && (
                         <span className="text-[#87786E] text-xs font-medium line-clamp-2 mt-1">

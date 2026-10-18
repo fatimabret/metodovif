@@ -56,8 +56,6 @@ export default function Memberships({ membresias = [], contactos = [] }) {
 
           return (
             <div key={plan.id_nivel} className={`relative flex flex-col transition-transform duration-300 hover:-translate-y-1 ${esOscura ? 'bg-[#384230] shadow-xl shadow-black/10' : 'bg-white shadow-lg shadow-black/5'} rounded-3xl p-6 md:p-8`}>
-              
-              // ... dentro del map() en Memberships.jsx ...
 
               {esPopular && (
                 <span className="absolute top-6 right-6 bg-[#EAE2D6] text-[#1A1412] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
