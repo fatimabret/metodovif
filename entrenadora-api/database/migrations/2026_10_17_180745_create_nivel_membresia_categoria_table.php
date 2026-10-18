@@ -13,16 +13,9 @@ return new class extends Migration
         Schema::create('nivel_membresia_categoria', function (Blueprint $table) {
             $table->id();
             
+            // Creamos las columnas pero sin el bloqueo estricto de llave foránea
             $table->bigInteger('id_nivel');
             $table->bigInteger('id_categoria');
-
-            $table->foreign('id_nivel')
-                  ->references('id_nivel')->on('nivel_membresia')
-                  ->onDelete('cascade');
-                  
-            $table->foreign('id_categoria')
-                  ->references('id_categoria')->on('categoria')
-                  ->onDelete('cascade');
         });
     }
 
