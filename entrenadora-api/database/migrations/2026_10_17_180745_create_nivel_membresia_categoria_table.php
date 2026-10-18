@@ -8,10 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists('nivel_membresia_categoria');
+
         Schema::create('nivel_membresia_categoria', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_nivel');
-            $table->unsignedBigInteger('id_categoria');
+            
+            $table->bigInteger('id_nivel');
+            $table->bigInteger('id_categoria');
 
             $table->foreign('id_nivel')
                   ->references('id_nivel')->on('nivel_membresia')
