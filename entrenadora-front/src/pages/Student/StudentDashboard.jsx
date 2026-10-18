@@ -242,6 +242,18 @@ export default function StudentDashboard() {
     }
   };
 
+  useEffect(() => {
+    if (showPasswordModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showPasswordModal]);
+
   if (!cargando && (perfilUsuario.estado === 'vencida' || (perfilUsuario.diasRestantes !== null && perfilUsuario.diasRestantes <= 0))) {
     return (
       <div className="min-h-screen bg-[#FAF7F2] pb-32 font-sans text-[#1A1412]">

@@ -1,11 +1,21 @@
+import { useEffect } from 'react';
 import { X, Clock } from 'lucide-react';
 
 export default function VideoModal({ video, onClose }) {
+  useEffect(() => {
+    if (video) {
+      document.body.style.overflow = 'hidden';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [video]);
+
   if (!video) return null; 
 
   return (
     <div 
-
       className="fixed inset-0 z-50 flex items-center justify-center bg-[#384230]/60 backdrop-blur-sm px-4 animate-fadeIn"
       onClick={onClose}
     >
