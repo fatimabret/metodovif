@@ -98,24 +98,23 @@ export default function ContenidoView() {
   };
 
   const handleToggleActivoVideo = async (id_ejercicio, estadoActual) => {
+    setVideosData(prev => prev.map(v => v.id_ejercicio === id_ejercicio ? { ...v, activo: !estadoActual } : v));
     try {
-      if (estadoActual) {
-        await api.delete(`/ejercicios/${id_ejercicio}`);
-      } else {
-        await api.patch(`/ejercicios/${id_ejercicio}/activar`);
-      }
-      setVideosData(prev => prev.map(v => v.id_ejercicio === id_ejercicio ? { ...v, activo: !estadoActual } : v));
+      if (estadoActual) await api.delete(`/ejercicios/${id_ejercicio}`);
+      else await api.patch(`/ejercicios/${id_ejercicio}/activar`);
     } catch (err) {
       console.error("Error al cambiar estado:", err);
+      setVideosData(prev => prev.map(v => v.id_ejercicio === id_ejercicio ? { ...v, activo: estadoActual } : v));
     }
   };
 
   const handleTogglePrueba = async (id_ejercicio, estadoActual) => {
+    setVideosData(prev => prev.map(v => v.id_ejercicio === id_ejercicio ? { ...v, es_de_prueba: !estadoActual } : v));
     try {
       await api.put(`/ejercicios/${id_ejercicio}`, { es_de_prueba: !estadoActual });
-      setVideosData(prev => prev.map(v => v.id_ejercicio === id_ejercicio ? { ...v, es_de_prueba: !estadoActual } : v));
     } catch (err) {
       console.error("Error al cambiar versión de prueba:", err);
+      setVideosData(prev => prev.map(v => v.id_ejercicio === id_ejercicio ? { ...v, es_de_prueba: estadoActual } : v));
     }
   };
 
@@ -151,15 +150,13 @@ export default function ContenidoView() {
   };
 
   const handleToggleActivoCategoria = async (id_categoria, estadoActual) => {
+    setCategoriasData(prev => prev.map(c => (c.id_categoria || c.id) === id_categoria ? { ...c, activo: !estadoActual } : c));
     try {
-      if (estadoActual) {
-        await api.delete(`/categorias/${id_categoria}`);
-      } else {
-        await api.patch(`/categorias/${id_categoria}/activar`);
-      }
-      setCategoriasData(prev => prev.map(c => (c.id_categoria || c.id) === id_categoria ? { ...c, activo: !estadoActual } : c));
+      if (estadoActual) await api.delete(`/categorias/${id_categoria}`);
+      else await api.patch(`/categorias/${id_categoria}/activar`);
     } catch (err) {
       console.error("Error al cambiar estado de categoría:", err);
+      setCategoriasData(prev => prev.map(c => (c.id_categoria || c.id) === id_categoria ? { ...c, activo: estadoActual } : c));
     }
   };
 
@@ -189,24 +186,23 @@ export default function ContenidoView() {
         titulo: plan.titulo, 
         descripcion: plan.descripcion, 
         precio: plan.precio,
-        incluye_rutinas: Boolean(plan.incluye_rutinas)
+        incluye_rutinas: Boolean(plan.incluye_rutinas),
+        categorias: plan.categorias || [] 
       });
     } else {
-      setMembresiaDraft({ titulo: '', descripcion: '', precio: '', incluye_rutinas: false });
+      setMembresiaDraft({ titulo: '', descripcion: '', precio: '', incluye_rutinas: false, categorias: [] });
     }
     setShowMembresiaModal(true);
   };
 
   const handleToggleActivoMembresia = async (id_nivel, estadoActual) => {
+    setMembresiasData(prev => prev.map(m => (m.id_nivel || m.id) === id_nivel ? { ...m, activo: !estadoActual } : m));
     try {
-      if (estadoActual) {
-        await api.delete(`/membresias/${id_nivel}`);
-      } else {
-        await api.patch(`/membresias/${id_nivel}/activar`);
-      }
-      setMembresiasData(prev => prev.map(m => (m.id_nivel || m.id) === id_nivel ? { ...m, activo: !estadoActual } : m));
+      if (estadoActual) await api.delete(`/membresias/${id_nivel}`);
+      else await api.patch(`/membresias/${id_nivel}/activar`);
     } catch (err) {
       console.error("Error al cambiar estado de membresía:", err);
+      setMembresiasData(prev => prev.map(m => (m.id_nivel || m.id) === id_nivel ? { ...m, activo: estadoActual } : m));
     }
   };
 
@@ -238,15 +234,13 @@ export default function ContenidoView() {
   };
 
   const handleToggleActivoEtiqueta = async (id_etiqueta, estadoActual) => {
+    setEtiquetasData(prev => prev.map(e => e.id_etiqueta === id_etiqueta ? { ...e, activo: !estadoActual } : e));
     try {
-      if (estadoActual) {
-        await api.delete(`/etiquetas/${id_etiqueta}`);
-      } else {
-        await api.patch(`/etiquetas/${id_etiqueta}/activar`);
-      }
-      setEtiquetasData(prev => prev.map(e => e.id_etiqueta === id_etiqueta ? { ...e, activo: !estadoActual } : e));
+      if (estadoActual) await api.delete(`/etiquetas/${id_etiqueta}`);
+      else await api.patch(`/etiquetas/${id_etiqueta}/activar`);
     } catch (err) {
       console.error("Error al cambiar estado de etiqueta:", err);
+      setEtiquetasData(prev => prev.map(e => e.id_etiqueta === id_etiqueta ? { ...e, activo: estadoActual } : e));
     }
   };
 
@@ -292,15 +286,13 @@ export default function ContenidoView() {
   };
 
   const handleToggleActivoTestimonio = async (id_testimonio, estadoActual) => {
+    setTestimonioData(prev => prev.map(t => t.id_testimonio === id_testimonio ? { ...t, activo: !estadoActual } : t));
     try {
-      if (estadoActual) {
-        await api.delete(`/testimonios/${id_testimonio}`);
-      } else {
-        await api.patch(`/testimonios/${id_testimonio}/activar`);
-      }
-      setTestimonioData(prev => prev.map(t => t.id_testimonio === id_testimonio ? { ...t, activo: !estadoActual } : t));
+      if (estadoActual) await api.delete(`/testimonios/${id_testimonio}`);
+      else await api.patch(`/testimonios/${id_testimonio}/activar`);
     } catch (err) {
       console.error("Error al cambiar estado de testimonio:", err);
+      setTestimonioData(prev => prev.map(t => t.id_testimonio === id_testimonio ? { ...t, activo: estadoActual } : t));
     }
   };
 
@@ -551,6 +543,7 @@ export default function ContenidoView() {
                       <button 
                         onClick={async () => {
                           const nuevoEstado = !esPopular;
+                          setMembresiasData(prev => prev.map(m => (m.id_nivel || m.id) === idPlan ? { ...m, es_popular: nuevoEstado } : m));
                           try {
                             await api.put(`/membresias/${idPlan}`, { 
                               titulo: plan.titulo,
@@ -559,9 +552,10 @@ export default function ContenidoView() {
                               incluye_rutinas: plan.incluye_rutinas,
                               es_popular: nuevoEstado 
                             });
-                            setMembresiasData(prev => prev.map(m => (m.id_nivel || m.id) === idPlan ? { ...m, es_popular: nuevoEstado } : m));
                           } catch (err) {
                             console.error("Error al actualizar popularidad:", err);
+                            // 2. Reversión si falla
+                            setMembresiasData(prev => prev.map(m => (m.id_nivel || m.id) === idPlan ? { ...m, es_popular: esPopular } : m));
                           }
                         }} 
                         className={`p-1.5 rounded-full transition-colors ${esPopular ? 'text-[#E56B6F] bg-[#E56B6F]/10' : 'text-[#D9D0C5] hover:text-[#87786E]'}`} 

@@ -31,7 +31,8 @@ class NivelMembresiaController extends Controller
                 'activo' => (bool) $nivel->activo,
                 'incluye_rutinas' => (bool) $nivel->incluye_rutinas,
                 'es_popular' => (bool) ($nivel->es_popular ?? false),
-                'categorias' => $nivel->categorias->pluck('id_categoria') 
+                'categorias' => $nivel->categorias->pluck('id_categoria'),
+                'categorias_detalle' => $nivel->categorias->pluck('titulo') 
             ];
         });
         

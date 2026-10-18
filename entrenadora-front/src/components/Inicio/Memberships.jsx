@@ -57,10 +57,25 @@ export default function Memberships({ membresias = [], contactos = [] }) {
           return (
             <div key={plan.id_nivel} className={`relative flex flex-col transition-transform duration-300 hover:-translate-y-1 ${esOscura ? 'bg-[#384230] shadow-xl shadow-black/10' : 'bg-white shadow-lg shadow-black/5'} rounded-3xl p-6 md:p-8`}>
               
+              // ... dentro del map() en Memberships.jsx ...
+
               {esPopular && (
                 <span className="absolute top-6 right-6 bg-[#EAE2D6] text-[#1A1412] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
                   Popular
                 </span>
+              )}
+
+              {plan.categorias_detalle && plan.categorias_detalle.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {plan.categorias_detalle.map((disciplina, idx) => (
+                    <span 
+                      key={idx} 
+                      className={`text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md ${esOscura ? 'bg-white/10 text-white/90' : 'bg-[#384230]/5 text-[#384230]'}`}
+                    >
+                      {disciplina}
+                    </span>
+                  ))}
+                </div>
               )}
 
               <span className={`text-xs uppercase tracking-widest font-semibold mb-4 ${esOscura ? 'text-white/70' : 'text-[#5C524B]'}`}>
