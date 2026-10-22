@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Camera, Trash2, Plus, ImageIcon, MessageCircle, Mail, Pencil, Link as LinkIcon, FileText, ChevronRight, KeyRound, X, Info } from 'lucide-react';
 import api from '../../../api';
 import PerfilModal from './PerfilModal';
+import SeccionesModal from './SeccionesModal';
 import ContactoModal from './ContactoModal';
 import FotoModal from './FotoModal';
 import TerminosModal from './TerminosModal';
@@ -30,6 +31,8 @@ export default function PerfilView() {
   const [passError, setPassError] = useState('');
   const [passSuccess, setPassSuccess] = useState('');
   const [cargandoPass, setCargandoPass] = useState(false);
+
+  const [showSeccionesModal, setShowSeccionesModal] = useState(false);
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -67,7 +70,7 @@ export default function PerfilView() {
       setCargandoPass(false);
     }
   };
-  
+
   useEffect(() => {
     if (showPasswordModal) {
       document.body.style.overflow = 'hidden';
@@ -157,6 +160,28 @@ export default function PerfilView() {
       setArchivoPerfil(null);
     } catch (error) {
       console.error("Error guardando perfil:", error);
+    }
+  };
+
+  const handleGuardarSecciones = async (seccionesActualizadas) => {
+    try {
+      const payload = {
+        titulo_principal: perfil?.titulo_principal || '',
+        secciones: seccionesActualizadas
+      };
+      
+      let res;
+      if (perfil?.id_perfil) {
+         res = await api.put(`/perfil-entrenadora/${perfil.id_perfil}`, payload);
+      } else {
+         res = await api.post('/perfil-entrenadora', payload);
+      }
+      
+      setPerfil(res.data);
+      setShowSeccionesModal(false);
+    } catch (error) {
+      console.error("Error guardando secciones:", error);
+      alert("Hubo un error al guardar los bloques.");
     }
   };
 
@@ -289,6 +314,25 @@ export default function PerfilView() {
         <div className="bg-white border border-[#EAE2D6] rounded-[1.25rem] p-4 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#87786E] block mb-2">Biografía</span>
           <p className="text-[#1A1412] font-medium text-sm leading-relaxed whitespace-pre-line">{perfil?.biografia || 'Sin biografía.'}</p>
+        </div>
+
+        {/* BOTÓN DE SECCIONES (Ahora está correctamente cerrado y ubicado) */}
+        <div 
+          onClick={() => setShowSeccionesModal(true)}
+          className="bg-white p-4 rounded-[1.25rem] border border-[#EAE2D6] flex items-center justify-between shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+        >
+          <div className="flex items-center gap-4">
+             <div className="w-10 h-10 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#384230] border border-[#EAE2D6]">
+               <FileText size={18} />
+             </div>
+             <div className="flex flex-col">
+               <span className="text-[#1A1412] text-sm font-bold">Bloques de Información (Acordeones)</span>
+               <span className="text-[#87786E] text-xs">Añade secciones como "Sobre el método", "Requisitos", etc.</span>
+             </div>
+          </div>
+          <div className="text-[#D9D0C5] group-hover:text-[#384230] transition-colors pr-2">
+             <ChevronRight size={20} />
+          </div>
         </div>
       </div>
 
@@ -431,6 +475,14 @@ export default function PerfilView() {
           setArchivoPerfil={setArchivoPerfil} 
           onClose={() => setShowEditPerfil(false)} 
           onGuardar={handleGuardarPerfil} 
+        />
+      )}
+
+      {showSeccionesModal && (
+        <SeccionesModal 
+          seccionesIniciales={perfil?.secciones || []}
+          onClose={() => setShowSeccionesModal(false)}
+          onGuardar={handleGuardarSecciones}
         />
       )}
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Info, MailCheck } from 'lucide-react';
+import { X, Info, MailCheck, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api.js';
 import { GoogleLogin } from '@react-oauth/google';
@@ -23,6 +23,10 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
   const [correoRecuperacion, setCorreoRecuperacion] = useState('');
   const [estadoRecuperacion, setEstadoRecuperacion] = useState('idle');
   const [errorRecuperacion, setErrorRecuperacion] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRegPassword, setShowRegPassword] = useState(false);
+  const [showRegConfirmPassword, setShowRegConfirmPassword] = useState(false);
 
   
   useEffect(() => {
@@ -238,14 +242,23 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
                       className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#1A1412] focus:outline-none focus:border-[#1A1412] focus:ring-1 focus:ring-[#1A1412] transition-all"
                       required
                     />
-                    <input 
-                      type="password" 
-                      placeholder="Contraseña" 
-                      value={credenciales.contrasenia}
-                      onChange={(e) => setCredenciales({...credenciales, contrasenia: e.target.value})}
-                      className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] focus:ring-1 focus:ring-[#384230] transition-all"
-                      required
-                    />
+                    <div className="relative">
+                      <input 
+                        type={showPassword ? "text" : "password"} 
+                        placeholder="Contraseña" 
+                        value={credenciales.contrasenia}
+                        onChange={(e) => setCredenciales({...credenciales, contrasenia: e.target.value})}
+                        className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] focus:ring-1 focus:ring-[#384230] transition-all"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#87786E] hover:text-[#384230] transition-colors p-1"
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
                   </div>
 
                   {errorLogin && (
@@ -296,8 +309,33 @@ export default function AuthModal({ activeView, onClose, onChangeView }) {
                 <form className="flex flex-col gap-3" onSubmit={handleRegister}>
                   <input type="text" placeholder="Nombre completo" value={regData.nombre} onChange={(e) => setRegData({...regData, nombre: e.target.value})} className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] transition-all" required />
                   <input type="email" placeholder="Correo electrónico" value={regData.correo} onChange={(e) => setRegData({...regData, correo: e.target.value})} className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#1A1412] focus:outline-none focus:border-[#1A1412] transition-all" required />
-                  <input type="password" placeholder="Crear contraseña" value={regData.contrasenia} onChange={(e) => setRegData({...regData, contrasenia: e.target.value})} className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] transition-all" required />
-                  <input type="password" placeholder="Confirmar contraseña" value={regData.confirmarContrasenia} onChange={(e) => setRegData({...regData, confirmarContrasenia: e.target.value})} className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] transition-all" required />
+                  <div className="relative">
+                    <input 
+                      type={showRegPassword ? "text" : "password"} 
+                      placeholder="Crear contraseña" 
+                      value={regData.contrasenia} 
+                      onChange={(e) => setRegData({...regData, contrasenia: e.target.value})} 
+                      className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] transition-all" 
+                      required 
+                    />
+                    <button type="button" onClick={() => setShowRegPassword(!showRegPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#87786E] hover:text-[#384230] transition-colors p-1">
+                      {showRegPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+
+                  <div className="relative">
+                    <input 
+                      type={showRegConfirmPassword ? "text" : "password"} 
+                      placeholder="Confirmar contraseña" 
+                      value={regData.confirmarContrasenia} 
+                      onChange={(e) => setRegData({...regData, confirmarContrasenia: e.target.value})} 
+                      className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-white border border-[#EAE2D6] text-sm text-[#384230] focus:outline-none focus:border-[#384230] transition-all" 
+                      required 
+                    />
+                    <button type="button" onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#87786E] hover:text-[#384230] transition-colors p-1">
+                      {showRegConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
 
                   {errorReg && <div className="mt-1 bg-[#D97777]/10 text-[#D97777] p-2.5 rounded-xl text-sm font-medium text-center">{errorReg}</div>}
 

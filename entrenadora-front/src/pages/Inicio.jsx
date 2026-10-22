@@ -3,6 +3,7 @@ import api from '../api';
 
 import Hero from '../components/Inicio/Hero';
 import Stats from '../components/Inicio/Stats';
+import InfoExtra from '../components/Inicio/InfoExtra';
 import Activities from '../components/Inicio/Activities';
 import PreviewExercises from '../components/Inicio/PreviewExercises';
 import Gallery from '../components/Inicio/Gallery';
@@ -124,6 +125,10 @@ export default function Inicio() {
             disciplinas={categoriasSegura} 
           />
         </section>
+        
+        <InfoExtra 
+          secciones={perfil?.secciones || []} 
+        />
         
         <Activities categorias={categorias} />
         <PreviewExercises ejercicios={ejerciciosPrueba} />

@@ -25,4 +25,9 @@ class PerfilEntrenadora extends Model
     protected $casts = [
         'mostrar_testimonios' => 'boolean',
     ];
+    
+    public function secciones()
+    {
+        return $this->hasMany(SeccionPerfil::class, 'id_perfil', 'id_perfil')->orderBy('orden', 'asc');
+    }
 }

@@ -15,9 +15,27 @@ class PerfilEntrenadoraController extends Controller
         $this->servicio = $servicio;
     }
 
-    public function index() { return response()->json($this->servicio->obtenerTodos(), 200); }
+    public function index() 
+    { 
+        $perfiles = $this->servicio->obtenerTodos();
+        
+        $perfiles->load(['secciones' => function($query) {
+            $query->where('activo', true)->orderBy('orden', 'asc');
+        }]);
+
+        return response()->json($perfiles, 200); 
+    }
     
-    public function show(string $id) { return response()->json($this->servicio->obtenerPorId($id), 200); }
+    public function show(string $id) 
+    { 
+        $perfil = $this->servicio->obtenerPorId($id);
+        
+        $perfil->load(['secciones' => function($query) {
+            $query->where('activo', true)->orderBy('orden', 'asc');
+        }]);
+
+        return response()->json($perfil, 200); 
+    }
 
     public function store(Request $request)
     {
@@ -48,14 +66,11 @@ class PerfilEntrenadoraController extends Controller
     {
         $perfil = PerfilEntrenadora::findOrFail($id);
 
-        // 1. Guardamos el interruptor directamente de forma segura
         if ($request->has('mostrar_testimonios')) {
             $perfil->mostrar_testimonios = $request->boolean('mostrar_testimonios');
             $perfil->save();
         }
 
-        // 2. ¡LA SOLUCIÓN! Cambiamos 'sometimes' por 'nullable' para que acepte nulos
-        // sin que Laravel rechace la petición silenciosamente.
         $datosValidados = $request->validate([
             'titulo_principal' => 'nullable|string|max:255',
             'biografia' => 'nullable|string',
@@ -65,6 +80,7 @@ class PerfilEntrenadoraController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'terminos_condiciones' => 'nullable|string',
             'mostrar_testimonios' => 'nullable|boolean',
+            'secciones' => 'nullable'
         ]);
 
         if ($request->hasFile('foto')) {
@@ -73,11 +89,41 @@ class PerfilEntrenadoraController extends Controller
             unset($datosValidados['foto']);
         }
 
+        $seccionesRecibidas = $request->input('secciones');
+        
+        if (is_string($seccionesRecibidas)) {
+            $seccionesRecibidas = json_decode($seccionesRecibidas, true);
+        }
+
+        unset($datosValidados['secciones']);
+
         if (!empty($datosValidados)) {
             $this->servicio->actualizar($id, $datosValidados);
         }
 
-        return response()->json($perfil->fresh(), 200);
+        if (is_array($seccionesRecibidas)) {
+            $idsRecibidos = collect($seccionesRecibidas)->pluck('id_seccion')->filter()->toArray();
+
+            $perfil->secciones()->whereNotIn('id_seccion', $idsRecibidos)->delete();
+
+            foreach ($seccionesRecibidas as $index => $seccionData) {
+                $perfil->secciones()->updateOrCreate(
+                    ['id_seccion' => $seccionData['id_seccion'] ?? null],
+                    [
+                        'titulo' => $seccionData['titulo'],
+                        'descripcion' => $seccionData['descripcion'],
+                        'orden' => $seccionData['orden'] ?? $index,
+                        'activo' => $seccionData['activo'] ?? true
+                    ]
+                );
+            }
+        } elseif ($request->has('secciones') && empty($seccionesRecibidas)) {
+            $perfil->secciones()->delete();
+        }
+
+        return response()->json($perfil->fresh(['secciones' => function($q) {
+            $q->orderBy('orden', 'asc');
+        }]), 200);
     }
 
     public function destroy(string $id)
